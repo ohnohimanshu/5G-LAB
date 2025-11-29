@@ -166,12 +166,6 @@
             font-size: 1.2rem;
         }
 
-        .exp1-icon { background: #3b82f6; }
-        .exp2-icon { background: #10b981; }
-        .exp3-icon { background: #f59e0b; }
-        .exp4-icon { background: #6366f1; }
-        .exp5-icon { background: #ef4444; }
-
         .exp-option-content h3 {
             font-size: 1rem;
             font-weight: 600;
@@ -448,6 +442,34 @@
             color: #cbd5e1;
         }
 
+        .exp-color-1 {
+            background-color: #3b82f6;
+        }
+
+        .exp-color-2 {
+            background-color: #10b981;
+        }
+
+        .exp-color-3 {
+            background-color: #f59e0b;
+        }
+
+        .exp-color-4 {
+            background-color: #6366f1;
+        }
+
+        .exp-color-5 {
+            background-color: #ef4444;
+        }
+
+        .exp-color-6 {
+            background-color: #8b5cf6;
+        }
+
+        .exp-color-7 {
+            background-color: #ec4899;
+        }
+
         @media (max-width: 1024px) {
             .booking-container {
                 grid-template-columns: 1fr;
@@ -484,7 +506,8 @@
             </a>
             <div class="nav-links">
                 <a href="{% url 'accounts:home' %}"><i class="fas fa-home"></i> Home</a>
-                <a href="{% url 'accounts:booking_dashboard' %}" style="background: #334155;"><i class="fas fa-calendar-alt"></i> Book Session</a>
+                <a href="{% url 'accounts:booking_dashboard' %}" style="background: #334155;"><i
+                        class="fas fa-calendar-alt"></i> Book Session</a>
                 <h1 style="color: #cbd5e1; font-size: 1rem;">Welcome, {{ user.username }}</h1>
                 <form action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
@@ -506,56 +529,30 @@
             <!-- Experiment Selector -->
             <div class="experiment-selector">
                 <h2>Select Experiment</h2>
-                
-                <div class="exp-option" data-exp="exp1" onclick="selectExperiment('exp1')">
-                    <div class="exp-option-icon exp1-icon">
+
+                {% for experiment in experiments %}
+                <div class="exp-option" data-exp="{{ experiment.exp_key }}"
+                    onclick="selectExperiment('{{ experiment.exp_key }}')">
+                    <div
+                        class="exp-option-icon {% cycle 'exp-color-1' 'exp-color-2' 'exp-color-3' 'exp-color-4' 'exp-color-5' 'exp-color-6' 'exp-color-7' %}">
+                        {% if 'Core' in experiment.name %}
                         <i class="fas fa-server"></i>
-                    </div>
-                    <div class="exp-option-content">
-                        <h3>Exp#1 OAI Core</h3>
-                        <p>Core network testing</p>
-                    </div>
-                </div>
-
-                <div class="exp-option" data-exp="exp2" onclick="selectExperiment('exp2')">
-                    <div class="exp-option-icon exp2-icon">
+                        {% elif 'gNB' in experiment.name %}
                         <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="exp-option-content">
-                        <h3>Exp#2 OAI+gNB</h3>
-                        <p>Base station integration</p>
-                    </div>
-                </div>
-
-                <div class="exp-option" data-exp="exp3" onclick="selectExperiment('exp3')">
-                    <div class="exp-option-icon exp3-icon">
+                        {% elif 'UE' in experiment.name %}
                         <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="exp-option-content">
-                        <h3>Exp#3 OAI+gNB+UE</h3>
-                        <p>End-to-end testing</p>
-                    </div>
-                </div>
-
-                <div class="exp-option" data-exp="exp4" onclick="selectExperiment('exp4')">
-                    <div class="exp-option-icon exp4-icon">
+                        {% elif 'Open5GS' in experiment.name %}
                         <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <div class="exp-option-content">
-                        <h3>Exp#4 Open5GS</h3>
-                        <p>Open5GS deployment</p>
-                    </div>
-                </div>
-
-                <div class="exp-option" data-exp="exp5" onclick="selectExperiment('exp5')">
-                    <div class="exp-option-icon exp5-icon">
+                        {% else %}
                         <i class="fas fa-network-wired"></i>
+                        {% endif %}
                     </div>
                     <div class="exp-option-content">
-                        <h3>Exp#5 Free5GC</h3>
-                        <p>Free5GC environment</p>
+                        <h3>{{ experiment.name }}</h3>
+                        <p>{{ experiment.description|truncatechars:30 }}</p>
                     </div>
                 </div>
+                {% endfor %}
             </div>
 
             <!-- Calendar Section -->
@@ -576,7 +573,8 @@
                         <button class="duration-btn" data-duration="15" onclick="selectDuration(15)">15 min</button>
                         <button class="duration-btn" data-duration="30" onclick="selectDuration(30)">30 min</button>
                         <button class="duration-btn" data-duration="45" onclick="selectDuration(45)">45 min</button>
-                        <button class="duration-btn selected" data-duration="60" onclick="selectDuration(60)">60 min</button>
+                        <button class="duration-btn selected" data-duration="60" onclick="selectDuration(60)">60
+                            min</button>
                     </div>
                 </div>
 
@@ -599,27 +597,29 @@
         <!-- My Bookings Section -->
         <div class="my-bookings-section">
             <h2><i class="fas fa-list"></i> My Upcoming Bookings</h2>
-            
+
             {% if user_bookings %}
-                {% for booking in user_bookings %}
-                <div class="booking-card">
-                    <div class="booking-info">
-                        <h4>{{ booking.experiment.name }}</h4>
-                        <p><i class="fas fa-clock"></i> {{ booking.start_time|date:"M d, Y - H:i" }} to {{ booking.end_time|date:"H:i" }} ({{ booking.duration }} min)</p>
-                    </div>
-                    <form method="post" action="{% url 'accounts:cancel_booking' booking.id %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-cancel-booking" onclick="return confirm('Are you sure you want to cancel this booking?')">
-                            <i class="fas fa-times"></i> Cancel
-                        </button>
-                    </form>
+            {% for booking in user_bookings %}
+            <div class="booking-card">
+                <div class="booking-info">
+                    <h4>{{ booking.experiment.name }}</h4>
+                    <p><i class="fas fa-clock"></i> {{ booking.start_time|date:"M d, Y - H:i" }} to {{
+                        booking.end_time|date:"H:i" }} ({{ booking.duration }} min)</p>
                 </div>
-                {% endfor %}
+                <form method="post" action="{% url 'accounts:cancel_booking' booking.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cancel-booking"
+                        onclick="return confirm('Are you sure you want to cancel this booking?')">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
             {% else %}
-                <div class="empty-state">
-                    <i class="fas fa-calendar-check"></i>
-                    <p>No upcoming bookings</p>
-                </div>
+            <div class="empty-state">
+                <i class="fas fa-calendar-check"></i>
+                <p>No upcoming bookings</p>
+            </div>
             {% endif %}
         </div>
     </div>
@@ -678,7 +678,7 @@
                     data.slots.forEach(slot => {
                         const slotDiv = document.createElement('div');
                         slotDiv.className = `time-slot ${slot.status || 'available'}`;
-                        
+
                         if (slot.status === 'booked' || slot.status === 'my_booking') {
                             slotDiv.style.cursor = 'not-allowed';
                         } else {
@@ -693,7 +693,7 @@
                             <div class="slot-time">${slot.display}</div>
                             <div class="slot-status">${statusText}</div>
                         `;
-                        
+
                         timeGrid.appendChild(slotDiv);
                     });
                 } else {

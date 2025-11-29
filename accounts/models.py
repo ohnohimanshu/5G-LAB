@@ -13,21 +13,26 @@ class User(AbstractUser):
 
 
 class Experiment(models.Model):
-    """Represent the 5 experiments."""
-    EXP_CHOICES = [
-        ('exp1', 'Exp#1 OAI Core'),
-        ('exp2', 'Exp#2 OAI+gNB'),
-        ('exp3', 'Exp#3 OAI+gNB+UE'),
-        ('exp4', 'Exp#4 Open5GS'),
-        ('exp5', 'Exp#5 Free5GC'),
-    ]
-    exp_key = models.CharField(max_length=10, unique=True, choices=EXP_CHOICES)
+    """Represent experiments (both system and custom)."""
+    exp_key = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    url = models.URLField()  # e.g., http://10.7.43.10:4040
+    url = models.URLField()  # Base URL without port, e.g., http://10.7.43.10
+    port = models.IntegerField(default=4040)  # Port number
+    is_custom = models.BooleanField(default=False)  # True for user-created experiments
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_experiments')
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    class Meta:
+        ordering = ['id']  # Show in order of creation
     
     def __str__(self):
         return self.name
+    
+    @property
+    def full_url(self):
+        """Return complete URL with port."""
+        return f"{self.url}:{self.port}"
 
 
 class SessionBooking(models.Model):

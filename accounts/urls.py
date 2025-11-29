@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/available-slots/', views.get_available_slots, name='available_slots'),
     path('trigger-service/', views.trigger_service, name='trigger_service'),
     path('profile/', views.profile_view, name='profile'),
+    path('add-experiment/', views.add_experiment, name='add_experiment'),
 ]
 
 

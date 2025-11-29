@@ -156,10 +156,37 @@
             font-size: 1.5rem;
         }
 
-        .exp2-card .action-icon { background: #10b981; }
-        .exp3-card .action-icon { background: #f59e0b; }
-        .exp4-card .action-icon { background: #6366f1; }
-        .exp5-card .action-icon { background: #ef4444; }
+        /* Dynamic colors based on index/id could be done with nth-child or JS, 
+           but for now we'll stick to a default blue or cycle through classes if possible.
+           Since we are looping, we can use cycle in django template.
+        */
+        .icon-color-1 {
+            background: #3b82f6;
+        }
+
+        .icon-color-2 {
+            background: #10b981;
+        }
+
+        .icon-color-3 {
+            background: #f59e0b;
+        }
+
+        .icon-color-4 {
+            background: #6366f1;
+        }
+
+        .icon-color-5 {
+            background: #ef4444;
+        }
+
+        .icon-color-6 {
+            background: #8b5cf6;
+        }
+
+        .icon-color-7 {
+            background: #ec4899;
+        }
 
         .action-card h3 {
             color: #1e293b;
@@ -219,14 +246,62 @@
             transform: none;
         }
 
-        .exp2-card .action-btn:not(:disabled) { background: #10b981; }
-        .exp2-card .action-btn:not(:disabled):hover { background: #059669; }
-        .exp3-card .action-btn:not(:disabled) { background: #f59e0b; }
-        .exp3-card .action-btn:not(:disabled):hover { background: #d97706; }
-        .exp4-card .action-btn:not(:disabled) { background: #6366f1; }
-        .exp4-card .action-btn:not(:disabled):hover { background: #4f46e5; }
-        .exp5-card .action-btn:not(:disabled) { background: #ef4444; }
-        .exp5-card .action-btn:not(:disabled):hover { background: #dc2626; }
+        /* Button colors matching icons */
+        .btn-color-1:not(:disabled) {
+            background: #3b82f6;
+        }
+
+        .btn-color-1:not(:disabled):hover {
+            background: #2563eb;
+        }
+
+        .btn-color-2:not(:disabled) {
+            background: #10b981;
+        }
+
+        .btn-color-2:not(:disabled):hover {
+            background: #059669;
+        }
+
+        .btn-color-3:not(:disabled) {
+            background: #f59e0b;
+        }
+
+        .btn-color-3:not(:disabled):hover {
+            background: #d97706;
+        }
+
+        .btn-color-4:not(:disabled) {
+            background: #6366f1;
+        }
+
+        .btn-color-4:not(:disabled):hover {
+            background: #4f46e5;
+        }
+
+        .btn-color-5:not(:disabled) {
+            background: #ef4444;
+        }
+
+        .btn-color-5:not(:disabled):hover {
+            background: #dc2626;
+        }
+
+        .btn-color-6:not(:disabled) {
+            background: #8b5cf6;
+        }
+
+        .btn-color-6:not(:disabled):hover {
+            background: #7c3aed;
+        }
+
+        .btn-color-7:not(:disabled) {
+            background: #ec4899;
+        }
+
+        .btn-color-7:not(:disabled):hover {
+            background: #db2777;
+        }
 
         .book-slot-btn {
             background: #6366f1;
@@ -248,6 +323,217 @@
             background: #4f46e5;
         }
 
+        .add-experiment-card {
+            background: white;
+            border: 2px dashed #cbd5e1;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+            transition: all 0.2s ease;
+        }
+
+        .add-experiment-card:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        .add-experiment-card .action-icon {
+            background: #eff6ff;
+            color: #3b82f6;
+            width: 64px;
+            height: 64px;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-experiment-card h3 {
+            color: #334155;
+        }
+
+        .add-experiment-card p {
+            color: #64748b;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .modal-header h2 {
+            color: #1e293b;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #334155;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .submit-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .cancel-btn {
+            flex: 1;
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .alert-messages {
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
         @media (max-width: 768px) {
             .main-container {
                 padding: 1rem;
@@ -264,6 +550,15 @@
 
             .welcome-section h1 {
                 font-size: 1.5rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -291,175 +586,141 @@
     </nav>
 
     <div class="main-container">
+        {% if messages %}
+        <div class="alert-messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="welcome-section">
             <h1>Dashboard</h1>
             <p>Manage and access your 5G experiments</p>
-             <a href="{% url 'accounts:booking_dashboard' %}"
-   style="
-       display: inline-flex;
-       align-items: center;
-       gap: 8px;
-       padding: 12px 20px;
-       background-color: #007bff;
-       color: white;
-       border-radius: 6px;
-       text-decoration: none;
-       font-size: 16px;
-       font-weight: 600;
-   ">
-    <i class="fas fa-calendar-plus" style="font-size:18px;"></i>
-    Book Time Slot
-</a>
-
+            <a href="{% url 'accounts:booking_dashboard' %}"
+                style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background-color: #007bff; color: white; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 600;">
+                <i class="fas fa-calendar-plus" style="font-size:18px;"></i>
+                Book Time Slot
+            </a>
         </div>
 
         <div class="quick-actions">
-            <!-- Exp 1 -->
-            <div class="action-card exp1-card {% if not active_bookings_by_key.exp1 and other_bookings.exp1 %}disabled{% endif %}">
-                <div class="action-icon">
+            {% for experiment in experiments %}
+            <div
+                class="action-card exp-card {% if not experiment.current_booking and experiment.other_booking %}disabled{% endif %}">
+                <div class="action-icon icon-color-{{ forloop.counter|add:0|stringformat:'s'|slice:':1' }}">
+                    {% if 'Core' in experiment.name %}
                     <i class="fas fa-server"></i>
-                </div>
-                <h3>Exp#1 OAI Core</h3>
-                <p>Test and validate your OAI core network functionality</p>
-
-                {% with booking=active_bookings_by_key.exp1 %}
-                {% if booking %}
-                    <div class="booking-badge">
-                        <i class="fas fa-clock"></i> Your Session: {{ booking.start_time|date:"H:i" }} - {{ booking.end_time|date:"H:i" }}
-                    </div>
-                    <form method="get" action="{% url 'accounts:start_experiment' booking.id %}">
-                        <button type="submit" class="action-btn">Launch Experiment</button>
-                    </form>
-                {% elif other_bookings.exp1 %}
-                    <div class="booking-badge booked-by-other">
-                        <i class="fas fa-lock"></i> In Use: {{ other_bookings.exp1.start_time|date:"H:i" }} - {{ other_bookings.exp1.end_time|date:"H:i" }}
-                    </div>
-                    <button class="action-btn" disabled>Experiment Busy</button>
-                {% else %}
-                    <button class="action-btn" disabled>No Active Session</button>
-                {% endif %}
-                {% endwith %}
-
-            
-            </div>
-
-            <!-- Exp 2 -->
-            <div class="action-card exp2-card {% if not active_bookings_by_key.exp2 and other_bookings.exp2 %}disabled{% endif %}">
-                <div class="action-icon">
+                    {% elif 'gNB' in experiment.name %}
                     <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>Exp#2 OAI+gNB</h3>
-                <p>Run gNB tests and analysis with OAI Core</p>
-
-                {% with booking=active_bookings_by_key.exp2 %}
-                {% if booking %}
-                    <div class="booking-badge">
-                        <i class="fas fa-clock"></i> Your Session: {{ booking.start_time|date:"H:i" }} - {{ booking.end_time|date:"H:i" }}
-                    </div>
-                    <form method="get" action="{% url 'accounts:start_experiment' booking.id %}">
-                        <button type="submit" class="action-btn">Launch Experiment</button>
-                    </form>
-                {% elif other_bookings.exp2 %}
-                    <div class="booking-badge booked-by-other">
-                        <i class="fas fa-lock"></i> In Use: {{ other_bookings.exp2.start_time|date:"H:i" }} - {{ other_bookings.exp2.end_time|date:"H:i" }}
-                    </div>
-                    <button class="action-btn" disabled>Experiment Busy</button>
-                {% else %}
-                    <button class="action-btn" disabled>No Active Session</button>
-                {% endif %}
-                {% endwith %}
-
-               
-            </div>
-
-            <!-- Exp 3 -->
-            <div class="action-card exp3-card {% if not active_bookings_by_key.exp3 and other_bookings.exp3 %}disabled{% endif %}">
-                <div class="action-icon">
+                    {% elif 'UE' in experiment.name %}
                     <i class="fas fa-mobile-alt"></i>
-                </div>
-                <h3>Exp#3 OAI+gNB+UE</h3>
-                <p>Simulate User Equipment connections and interactions</p>
-
-                {% with booking=active_bookings_by_key.exp3 %}
-                {% if booking %}
-                    <div class="booking-badge">
-                        <i class="fas fa-clock"></i> Your Session: {{ booking.start_time|date:"H:i" }} - {{ booking.end_time|date:"H:i" }}
-                    </div>
-                    <form method="get" action="{% url 'accounts:start_experiment' booking.id %}">
-                        <button type="submit" class="action-btn">Launch Experiment</button>
-                    </form>
-                {% elif other_bookings.exp3 %}
-                    <div class="booking-badge booked-by-other">
-                        <i class="fas fa-lock"></i> In Use: {{ other_bookings.exp3.start_time|date:"H:i" }} - {{ other_bookings.exp3.end_time|date:"H:i" }}
-                    </div>
-                    <button class="action-btn" disabled>Experiment Busy</button>
-                {% else %}
-                    <button class="action-btn" disabled>No Active Session</button>
-                {% endif %}
-                {% endwith %}
-
-                
-            </div>
-
-            <!-- Exp 4 -->
-            <div class="action-card exp4-card {% if not active_bookings_by_key.exp4 and other_bookings.exp4 %}disabled{% endif %}">
-                <div class="action-icon">
+                    {% elif 'Open5GS' in experiment.name %}
                     <i class="fas fa-project-diagram"></i>
-                </div>
-                <h3>Exp#4 Open5GS</h3>
-                <p>Manage your Open5GS core network deployment</p>
-
-                {% with booking=active_bookings_by_key.exp4 %}
-                {% if booking %}
-                    <div class="booking-badge">
-                        <i class="fas fa-clock"></i> Your Session: {{ booking.start_time|date:"H:i" }} - {{ booking.end_time|date:"H:i" }}
-                    </div>
-                    <form method="get" action="{% url 'accounts:start_experiment' booking.id %}">
-                        <button type="submit" class="action-btn">Launch Experiment</button>
-                    </form>
-                {% elif other_bookings.exp4 %}
-                    <div class="booking-badge booked-by-other">
-                        <i class="fas fa-lock"></i> In Use: {{ other_bookings.exp4.start_time|date:"H:i" }} - {{ other_bookings.exp4.end_time|date:"H:i" }}
-                    </div>
-                    <button class="action-btn" disabled>Experiment Busy</button>
-                {% else %}
-                    <button class="action-btn" disabled>No Active Session</button>
-                {% endif %}
-                {% endwith %}
-
-               
-            </div>
-
-            <!-- Exp 5 -->
-            <div class="action-card exp5-card {% if not active_bookings_by_key.exp5 and other_bookings.exp5 %}disabled{% endif %}">
-                <div class="action-icon">
+                    {% else %}
                     <i class="fas fa-network-wired"></i>
+                    {% endif %}
                 </div>
-                <h3>Exp#5 Free5GC</h3>
-                <p>Access your Free5GC core network environment</p>
+                <h3>{{ experiment.name }}</h3>
+                <p>{{ experiment.description }}</p>
 
-                {% with booking=active_bookings_by_key.exp5 %}
-                {% if booking %}
-                    <div class="booking-badge">
-                        <i class="fas fa-clock"></i> Your Session: {{ booking.start_time|date:"H:i" }} - {{ booking.end_time|date:"H:i" }}
-                    </div>
-                    <form method="get" action="{% url 'accounts:start_experiment' booking.id %}">
-                        <button type="submit" class="action-btn">Launch Experiment</button>
-                    </form>
-                {% elif other_bookings.exp5 %}
-                    <div class="booking-badge booked-by-other">
-                        <i class="fas fa-lock"></i> In Use: {{ other_bookings.exp5.start_time|date:"H:i" }} - {{ other_bookings.exp5.end_time|date:"H:i" }}
-                    </div>
-                    <button class="action-btn" disabled>Experiment Busy</button>
+                {% if experiment.current_booking %}
+                <div class="booking-badge">
+                    <i class="fas fa-clock"></i> Your Session: {{ experiment.current_booking.start_time|date:"H:i" }} -
+                    {{ experiment.current_booking.end_time|date:"H:i" }}
+                </div>
+                <form method="get" action="{% url 'accounts:start_experiment' experiment.current_booking.id %}">
+                    <button type="submit"
+                        class="action-btn btn-color-{{ forloop.counter|add:0|stringformat:'s'|slice:':1' }}">Launch
+                        Experiment</button>
+                </form>
+                {% elif experiment.other_booking %}
+                <div class="booking-badge booked-by-other">
+                    <i class="fas fa-lock"></i> In Use: {{ experiment.other_booking.start_time|date:"H:i" }} - {{
+                    experiment.other_booking.end_time|date:"H:i" }}
+                </div>
+                <button class="action-btn" disabled>Experiment Busy</button>
                 {% else %}
-                    <button class="action-btn" disabled>No Active Session</button>
+                <button class="action-btn" disabled>No Active Session</button>
                 {% endif %}
-                {% endwith %}
-
-                
             </div>
+            {% endfor %}
+
+            {% if user.is_staff %}
+            <!-- Add Experiment Card (Admin Only) -->
+            <div class="action-card add-experiment-card" onclick="openModal()">
+                <div class="action-icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <h3>Add Experiment</h3>
+                <p>Click to add a new experiment</p>
+            </div>
+            {% endif %}
         </div>
     </div>
+
+    <!-- Modal Form -->
+    <div class="modal-overlay" id="experimentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Experiment</h2>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="experimentForm" method="post" action="{% url 'accounts:add_experiment' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="expName">Experiment Name</label>
+                    <input type="text" id="expName" name="name" placeholder="e.g., Exp#6 Custom Setup" required>
+                </div>
+                <div class="form-group">
+                    <label for="expDescription">Description</label>
+                    <textarea id="expDescription" name="description"
+                        placeholder="Describe the purpose and functionality of this experiment" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="expUrl">URL</label>
+                    <input type="url" id="expUrl" name="url" placeholder="http://10.7.43.20" required>
+                </div>
+                <div class="form-group">
+                    <label for="expPort">Port</label>
+                    <input type="number" id="expPort" name="port" placeholder="8080" min="1" max="65535" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="submit-btn">Add Experiment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('experimentModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('experimentModal').classList.remove('active');
+            document.getElementById('experimentForm').reset();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('experimentModal').addEventListener('click', function (event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
 </body>
 
 </html>

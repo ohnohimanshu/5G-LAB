@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.utils import timezone
 from django.conf import settings
 from datetime import timedelta
 from .models import Experiment, SessionBooking
-from .forms import SignUpForm
+from .forms import SignUpForm, ExperimentForm
 import logging
 import os
 import threading
@@ -42,10 +43,14 @@ def intro_view(request):
     return render(request, 'intro.html')
     
 # ✅ Home Page - Requires login
+# ✅ Home Page - Requires login
 @login_required
 def home(request):
     """Home page after login with booking context."""
     now = timezone.now()
+    
+    # Get all experiments
+    experiments = Experiment.objects.all()
     
     # Get user's active bookings
     user_bookings = request.user.bookings.filter(
@@ -61,21 +66,21 @@ def home(request):
         end_time__gt=now
     ).exclude(user=request.user)
     
-    # Organize bookings by experiment key
-    active_bookings_by_key = {}
-    for booking in user_bookings:
-        active_bookings_by_key[booking.experiment.exp_key] = booking
+    # Create lookup dicts
+    user_bookings_map = {b.experiment.exp_key: b for b in user_bookings}
+    other_bookings_map = {b.experiment.exp_key: b for b in other_bookings_qs}
     
-    other_bookings = {}
-    for booking in other_bookings_qs:
-        other_bookings[booking.experiment.exp_key] = booking
+    # Attach booking info to experiments
+    for exp in experiments:
+        exp.current_booking = user_bookings_map.get(exp.exp_key)
+        exp.other_booking = other_bookings_map.get(exp.exp_key)
     
     context = {
-        'active_bookings_by_key': active_bookings_by_key,
-        'other_bookings': other_bookings,
+        'experiments': experiments,
     }
     
     return render(request, 'home.html', context)
+
 
 # ✅ Signup View
 def signup_view(request):
@@ -174,7 +179,7 @@ def start_experiment(request, booking_id):
             logger.info("Restart triggered for booking %s (user: %s)", booking_id, request.user.username)
     
     # Redirect to experiment UI
-    return redirect(exp.url)
+    return redirect(exp.full_url)
 
 
 @login_required
@@ -351,3 +356,25 @@ def book_session(request):
                 request.user.username, exp_key, start_time, end_time, duration)
     
     return redirect('accounts:booking_dashboard')
+
+
+@staff_member_required
+@require_POST
+def add_experiment(request):
+    """Add a new experiment (admin only)."""
+    form = ExperimentForm(request.POST)
+    
+    if form.is_valid():
+        experiment = form.save(commit=False)
+        experiment.created_by = request.user
+        experiment.save()
+        
+        messages.success(request, f'Experiment "{experiment.name}" added successfully!')
+        logger.info("Admin %s created new experiment: %s", request.user.username, experiment.name)
+    else:
+        messages.error(request, 'Failed to add experiment. Please check the form.')
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f'{field}: {error}')
+    
+    return redirect('accounts:home')
