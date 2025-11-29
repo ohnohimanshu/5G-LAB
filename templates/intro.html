@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P5G-LaaS - Private 5G Lab as a Service</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navigation */
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-logo h2 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.nav-logo i {
+    color: #00d4ff;
+    margin-right: 0.5rem;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-menu a:hover {
+    color: #00d4ff;
+    transform: translateY(-2px);
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #00d4ff;
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 3px 0;
+    transition: 0.3s;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+    animation: float 20s infinite linear;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.hero-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    color: #e0e6ff;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: #c7d2fe;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Network Diagram */
+.network-diagram {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Shared styles for all nodes */
+.node {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.node:hover {
+    transform: scale(1.1);
+}
+
+/* gNB/Core */
+.core-node {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    top: 20%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+}
+
+/* RAN node - center */
+.ran-node {
+    background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* UE node - lower right */
+.ue-node {
+    background: linear-gradient(45deg, #45b7d1, #96ceb4);
+    top: 80%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+}
+
+/* Icons and text */
+.node i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.node span {
+    font-size: 0.9rem;
+}
+
+/* Pulsing animation */
+@keyframes pulse {
+    0% { box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    50% { box-shadow: 0 12px 35px rgba(0,0,0,0.3); }
+    100% { box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+}
+
+/* Connection lines container */
+.connections {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    z-index: -1;
+}
+
+/* Animated connection line */
+.connection-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: flow 3s infinite;
+}
+
+.connection-line:first-child {
+    left: 20%;
+    width: 30%;
+}
+
+.connection-line:last-child {
+    right: 20%;
+    width: 30%;
+}
+
+@keyframes flow {
+    0% { opacity: 0; transform: scaleX(0); }
+    50% { opacity: 1; transform: scaleX(1); }
+    100% { opacity: 0; transform: scaleX(0); }
+}
+
+.node.dragging {
+    transition: none !important;
+    animation: none !important;
+    cursor: grabbing;
+}
+
+
+
+
+/* Section Styles */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #2c3e50;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+/* Technology Section */
+.technology {
+    padding: 6rem 0;
+    background: white;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.tech-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.tech-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.tech-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.tech-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.tech-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.tech-card p {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.tech-details {
+    margin-top: 1.5rem;
+}
+
+.tech-details h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.tech-details ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.tech-details li {
+    padding: 0.5rem 0;
+    color: #555;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.tech-details li:last-child {
+    border-bottom: none;
+}
+
+.tech-details strong {
+    color: #667eea;
+}
+
+/* Solutions Section */
+.solutions {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.solutions-comparison {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.solution-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.solution-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+}
+
+.solution-card.featured {
+    transform: scale(1.05);
+    border: 2px solid #667eea;
+}
+
+.solution-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+.solution-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.solution-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge.recommended {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+}
+
+.badge {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.solution-content p {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.features {
+    margin-bottom: 1.5rem;
+}
+
+.features h4 {
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.features li {
+    padding: 0.5rem 0;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.features i {
+    color: #28a745;
+    font-size: 0.9rem;
+}
+
+.tech-specs {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.tech-specs h4 {
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.tech-specs ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tech-specs li {
+    padding: 0.25rem 0;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.tech-specs strong {
+    color: #667eea;
+}
+
+/* Experiments Section */
+.experiments {
+    padding: 6rem 0;
+    background: white;
+}
+
+.experiments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.experiment-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.experiment-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+.experiment-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.experiment-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.experiment-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.experiment-card p {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.experiment-details {
+    margin-bottom: 2rem;
+}
+
+.experiment-details h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.experiment-details ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.experiment-details li {
+    padding: 0.25rem 0;
+    color: #555;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.experiment-details li::before {
+    content: '•';
+    color: #667eea;
+    position: absolute;
+    left: 0;
+}
+
+.experiment-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-secondary {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary:hover {
+    background: rgba(102, 126, 234, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Documentation Section */
+.documentation {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.docs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.doc-category {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.doc-category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+.doc-category h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.doc-category i {
+    color: #667eea;
+}
+
+.doc-category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.doc-category li {
+    margin-bottom: 0.75rem;
+}
+
+.doc-category a {
+    color: #555;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.doc-category a:hover {
+    color: #667eea;
+    padding-left: 1rem;
+}
+
+/* Tutorials Section */
+.tutorials {
+    padding: 6rem 0;
+    background: white;
+}
+
+.tutorial-timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tutorial-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #667eea, #764ba2);
+    transform: translateX(-50%);
+}
+
+.tutorial-step {
+    position: relative;
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.tutorial-step:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+    z-index: 2;
+    position: relative;
+    margin: 0 2rem;
+}
+
+.step-content {
+    flex: 1;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.step-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.step-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.step-content p {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.tutorial-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.tutorial-link:hover {
+    color: #764ba2;
+}
+
+/* Footer */
+.footer {
+    background: #2c3e50;
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3,
+.footer-section h4 {
+    margin-bottom: 1rem;
+    color: #ecf0f1;
+}
+
+.footer-section p {
+    color: #bdc3c7;
+    line-height: 1.8;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #00d4ff;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid #34495e;
+    color: #95a5a6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background-color: rgba(102, 126, 234, 0.95);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        backdrop-filter: blur(10px);
+        padding: 2rem 0;
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-menu li {
+        margin: 1rem 0;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tech-grid,
+    .solutions-comparison,
+    .experiments-grid,
+    .docs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tutorial-timeline::before {
+        left: 30px;
+    }
+
+    .tutorial-step {
+        flex-direction: row !important;
+    }
+
+    .step-number {
+        margin: 0 1rem 0 0;
+    }
+
+    .step-content {
+        margin-left: 1rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .tech-card,
+    .solution-card,
+    .experiment-card,
+    .doc-category {
+        padding: 1.5rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .nav-container {
+        padding: 1rem;
+    }
+
+    .network-diagram {
+        height: 300px;
+    }
+
+    .node {
+        width: 80px;
+        height: 80px;
+    }
+
+    .node i {
+        font-size: 1.5rem;
+    }
+
+    .node span {
+        font-size: 0.8rem;
+    }
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #764ba2, #667eea);
+}
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2><i class="fas fa-network-wired"></i> P5G-LaaS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#experiments">Experiments</a></li>
+                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="#tutorials">Tutorials</a></li>
+                <li><a href="/login" class="btn-primary">Start Experiments</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Private 5G Lab as a Service</h1>
+                <p class="hero-subtitle">Accelerate 5G Innovation with Cloud-Native Virtualized Infrastructure</p>
+                <p class="hero-description">
+                    Experience the future of telecommunications with our comprehensive P5G-LaaS platform. 
+                    Deploy, test, and innovate with OpenAirInterface, Free5GC, and Open5GS in a fully 
+                    virtualized environment designed for research, education, and industry applications.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#technology" class="btn btn-primary">Explore Technology</a>
+                    <a href="#experiments" class="btn btn-secondary">View Experiments</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="network-diagram">
+                    <div class="node core-node">
+                        <i class="fas fa-server"></i>
+                        <span>5G Core</span>
+                    </div>
+                    <div class="node ran-node">
+                        <i class="fas fa-broadcast-tower"></i>
+                        <span>RAN</span>
+                    </div>
+                    <div class="node ue-node">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>UE</span>
+                    </div>
+                    <div class="connections">
+                        <div class="connection-line"></div>
+                        <div class="connection-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Overview -->
+    <section id="technology" class="technology">
+        <div class="container">
+            <h2 class="section-title">5G Technology Foundation</h2>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>5G Core Network Architecture</h3>
+                    <p>The 5G Core (5GC) represents a revolutionary shift from traditional hardware-based networks to a fully cloud-native, software-defined architecture. Built on Service-Based Architecture (SBA), the 5GC enables unprecedented flexibility and scalability.</p>
+                    <div class="tech-details">
+                        <h4>Key Components:</h4>
+                        <ul>
+                            <li><strong>AMF (Access and Mobility Management):</strong> Handles device registration, authentication, and mobility management</li>
+                            <li><strong>SMF (Session Management Function):</strong> Manages IP sessions and Quality of Service policies</li>
+                            <li><strong>UPF (User Plane Function):</strong> Routes user traffic and enforces QoS policies</li>
+                            <li><strong>UDM (Unified Data Management):</strong> Stores subscriber data and profiles</li>
+                            <li><strong>AUSF (Authentication Server Function):</strong> Provides security authentication</li>
+                            <li><strong>PCF (Policy Control Function):</strong> Manages policy rules and QoS parameters</li>
+                            <li><strong>NRF (Network Repository Function):</strong> Enables service discovery between network functions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <h3>Radio Access Network (RAN)</h3>
+                    <p>5G RAN introduces disaggregated, flexible, and virtual architecture with advanced technologies like Massive MIMO and beamforming. The gNodeB (gNB) serves as the primary base station component.</p>
+                    <div class="tech-details">
+                        <h4>Advanced Features:</h4>
+                        <ul>
+                            <li><strong>Massive MIMO:</strong> Multiple antennas for improved spectral efficiency and coverage</li>
+                            <li><strong>Beamforming:</strong> Directional signal transmission for enhanced performance</li>
+                            <li><strong>Network Slicing:</strong> Logical network partitioning for different service requirements</li>
+                            <li><strong>Edge Computing:</strong> Reduced latency through distributed processing</li>
+                            <li><strong>Dual Connectivity:</strong> Simultaneous connection to multiple base stations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>Network Function Virtualization</h3>
+                    <p>NFV enables network functions to run as software on standard hardware, providing flexibility, scalability, and cost efficiency. Container-based deployment ensures portability and rapid scaling.</p>
+                    <div class="tech-details">
+                        <h4>Benefits:</h4>
+                        <ul>
+                            <li><strong>Containerization:</strong> Docker-based deployment for modularity and portability</li>
+                            <li><strong>Orchestration:</strong> Kubernetes for automated management and scaling</li>
+                            <li><strong>Cloud-Native:</strong> Microservices architecture for improved resilience</li>
+                            <li><strong>DevOps Integration:</strong> CI/CD pipelines for rapid deployment</li>
+                            <li><strong>Resource Efficiency:</strong> Optimized hardware utilization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Open Source Solutions -->
+    <section id="solutions" class="solutions">
+        <div class="container">
+            <h2 class="section-title">Open Source 5G Solutions</h2>
+            <div class="solutions-comparison">
+                <div class="solution-card featured">
+                    <div class="solution-header">
+                        <h3>OpenAirInterface (OAI)</h3>
+                        <span class="badge recommended">Recommended</span>
+                    </div>
+                    <div class="solution-content">
+                        <p>Comprehensive open-source platform supporting both 5G Core Network and Radio Access Network functionalities. OAI provides end-to-end 5G implementation with full 3GPP compliance.</p>
+                        <div class="features">
+                            <h4>Key Features:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Complete 5G Core and RAN support</li>
+                                <li><i class="fas fa-check"></i> Full 3GPP Release 16/17 compliance</li>
+                                <li><i class="fas fa-check"></i> Advanced network slicing capabilities</li>
+                                <li><i class="fas fa-check"></i> Simulation and emulation support</li>
+                                <li><i class="fas fa-check"></i> Active development community</li>
+                            </ul>
+                        </div>
+                        <div class="tech-specs">
+                            <h4>Technical Specifications:</h4>
+                            <ul>
+                                <li><strong>Language:</strong> C, C++</li>
+                                <li><strong>Database:</strong> PostgreSQL</li>
+                                <li><strong>Deployment:</strong> Docker containers</li>
+                                <li><strong>Standards:</strong> 3GPP R16/R17</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="solution-card">
+                    <div class="solution-header">
+                        <h3>Free5GC</h3>
+                        <span class="badge">Core Network</span>
+                    </div>
+                    <div class="solution-content">
+                        <p>Open-source 5G Core Network implementation focusing on standalone (SA) deployment. Provides modular architecture with comprehensive core network functions.</p>
+                        <div class="features">
+                            <h4>Key Features:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> 5G Core Network functions</li>
+                                <li><i class="fas fa-check"></i> Modular design architecture</li>
+                                <li><i class="fas fa-check"></i> RESTful API interfaces</li>
+                                <li><i class="fas fa-check"></i> Easy deployment and configuration</li>
+                                <li><i class="fas fa-check"></i> Web-based management interface</li>
+                            </ul>
+                        </div>
+                        <div class="tech-specs">
+                            <h4>Technical Specifications:</h4>
+                            <ul>
+                                <li><strong>Language:</strong> Go, Python</li>
+                                <li><strong>Database:</strong> MongoDB, MySQL</li>
+                                <li><strong>Deployment:</strong> Docker containers</li>
+                                <li><strong>Standards:</strong> 3GPP R15/R16</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="solution-card">
+                    <div class="solution-header">
+                        <h3>Open5GS</h3>
+                        <span class="badge">Multi-Generation</span>
+                    </div>
+                    <div class="solution-content">
+                        <p>Versatile open-source implementation supporting both 4G EPC and 5G Core networks. Provides backward compatibility and smooth migration path.</p>
+                        <div class="features">
+                            <h4>Key Features:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> 4G/5G dual support</li>
+                                <li><i class="fas fa-check"></i> Lightweight implementation</li>
+                                <li><i class="fas fa-check"></i> Flexible configuration options</li>
+                                <li><i class="fas fa-check"></i> Resource efficient</li>
+                                <li><i class="fas fa-check"></i> Active maintenance</li>
+                            </ul>
+                        </div>
+                        <div class="tech-specs">
+                            <h4>Technical Specifications:</h4>
+                            <ul>
+                                <li><strong>Language:</strong> Go, Golang</li>
+                                <li><strong>Database:</strong> MongoDB, MySQL</li>
+                                <li><strong>Deployment:</strong> Docker containers</li>
+                                <li><strong>Standards:</strong> 3GPP R15/R16/R17</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiments Section -->
+    <section id="experiments" class="experiments">
+        <div class="container">
+            <h2 class="section-title">Available Experiments</h2>
+            <div class="experiments-grid">
+                <div class="experiment-card">
+                    <div class="experiment-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Experiment 1: Core Network Deployment</h3>
+                    <p>Deploy and configure a complete 5G Core Network using OpenAirInterface. Learn about network function deployment, service registration, and inter-NF communication.</p>
+                    <div class="experiment-details">
+                        <h4>Learning Objectives:</h4>
+                        <ul>
+                            <li>Understand 5G Core architecture components</li>
+                            <li>Deploy AMF, SMF, UPF, and supporting functions</li>
+                            <li>Configure service-based interfaces</li>
+                            <li>Monitor network function health and performance</li>
+                        </ul>
+                        <h4>Prerequisites:</h4>
+                        <ul>
+                            <li>Basic understanding of network protocols</li>
+                            <li>Familiarity with Docker containerization</li>
+                            <li>Knowledge of Linux command line</li>
+                        </ul>
+                    </div>
+                    <div class="experiment-actions">
+                        <a href="/login" class="btn btn-primary">Start Experiment</a>
+                        <a href="#docs-exp1" class="btn btn-secondary">View Documentation</a>
+                    </div>
+                </div>
+
+                <div class="experiment-card">
+                    <div class="experiment-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <h3>Experiment 2: RAN Configuration</h3>
+                    <p>Configure and deploy a 5G Radio Access Network with gNodeB simulation. Explore radio protocols, beamforming, and UE connectivity scenarios.</p>
+                    <div class="experiment-details">
+                        <h4>Learning Objectives:</h4>
+                        <ul>
+                            <li>Deploy virtualized gNodeB components</li>
+                            <li>Configure radio parameters and cell settings</li>
+                            <li>Understand NR air interface protocols</li>
+                            <li>Implement beamforming and MIMO techniques</li>
+                        </ul>
+                        <h4>Prerequisites:</h4>
+                        <ul>
+                            <li>Understanding of radio frequency concepts</li>
+                            <li>Knowledge of cellular network basics</li>
+                            <li>Completion of Experiment 1</li>
+                        </ul>
+                    </div>
+                    <div class="experiment-actions">
+                        <a href="/login" class="btn btn-primary">Start Experiment</a>
+                        <a href="#docs-exp2" class="btn btn-secondary">View Documentation</a>
+                    </div>
+                </div>
+
+                <div class="experiment-card">
+                    <div class="experiment-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Experiment 3: End-to-End Testing</h3>
+                    <p>Simulate complete user equipment scenarios with end-to-end data flow testing. Analyze performance metrics, QoS implementation, and network slicing.</p>
+                    <div class="experiment-details">
+                        <h4>Learning Objectives:</h4>
+                        <ul>
+                            <li>Deploy simulated UE devices</li>
+                            <li>Test registration and authentication procedures</li>
+                            <li>Implement network slicing scenarios</li>
+                            <li>Analyze performance and QoS metrics</li>
+                        </ul>
+                        <h4>Prerequisites:</h4>
+                        <ul>
+                            <li>Completion of Experiments 1 and 2</li>
+                            <li>Understanding of 5G procedures</li>
+                            <li>Knowledge of network performance analysis</li>
+                        </ul>
+                    </div>
+                    <div class="experiment-actions">
+                        <a href="/login" class="btn btn-primary">Start Experiment</a>
+                        <a href="#docs-exp3" class="btn btn-secondary">View Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="documentation" class="documentation">
+        <div class="container">
+            <h2 class="section-title">Documentation & Resources</h2>
+            <div class="docs-grid">
+                <div class="doc-category">
+                    <h3><i class="fas fa-book"></i> Getting Started</h3>
+                    <ul>
+                        <li><a href="#setup-guide">System Setup Guide</a></li>
+                        <li><a href="#prerequisites">Prerequisites & Requirements</a></li>
+                        <li><a href="#installation">Installation Instructions</a></li>
+                        <li><a href="#first-deployment">First Deployment Tutorial</a></li>
+                    </ul>
+                </div>
+                <div class="doc-category">
+                    <h3><i class="fas fa-cogs"></i> Technical References</h3>
+                    <ul>
+                        <li><a href="#architecture">5G Architecture Overview</a></li>
+                        <li><a href="#network-functions">Network Function Specifications</a></li>
+                        <li><a href="#protocols">Protocol Implementation Details</a></li>
+                        <li><a href="#apis">API Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="doc-category">
+                    <h3><i class="fas fa-tools"></i> Configuration Guides</h3>
+                    <ul>
+                        <li><a href="#core-config">Core Network Configuration</a></li>
+                        <li><a href="#ran-config">RAN Configuration Guide</a></li>
+                        <li><a href="#ue-config">UE Simulation Setup</a></li>
+                        <li><a href="#troubleshooting">Troubleshooting Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorials Section -->
+    <section id="tutorials" class="tutorials">
+        <div class="container">
+            <h2 class="section-title">Step-by-Step Tutorials</h2>
+            <div class="tutorial-timeline">
+                <div class="tutorial-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Environment Setup</h3>
+                        <p>Learn how to set up the development environment, install Docker, and configure the necessary tools for P5G-LaaS deployment.</p>
+                        <a href="#tutorial-1" class="tutorial-link">View Tutorial</a>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Core Network Deployment</h3>
+                        <p>Deploy your first 5G Core Network using OpenAirInterface with detailed configuration explanations and troubleshooting tips.</p>
+                        <a href="#tutorial-2" class="tutorial-link">View Tutorial</a>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>RAN Integration</h3>
+                        <p>Integrate Radio Access Network components with the core network and understand the signaling procedures.</p>
+                        <a href="#tutorial-3" class="tutorial-link">View Tutorial</a>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Performance Testing</h3>
+                        <p>Conduct comprehensive performance testing using various tools and metrics to evaluate network performance.</p>
+                        <a href="#tutorial-4" class="tutorial-link">View Tutorial</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>P5G-LaaS</h3>
+                    <p>Democratizing 5G technology through open-source solutions and cloud-native virtualization.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#technology">Technology</a></li>
+                        <li><a href="#experiments">Experiments</a></li>
+                        <li><a href="#documentation">Documentation</a></li>
+                        <li><a href="#tutorials">Tutorials</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://openairinterface.org/" target="_blank">OpenAirInterface</a></li>
+                        <li><a href="https://free5gc.org/" target="_blank">Free5GC</a></li>
+                        <li><a href="https://open5gs.org/" target="_blank">Open5GS</a></li>
+                        <li><a href="https://www.3gpp.org/" target="_blank">3GPP Standards</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 P5G-LaaS. All rights reserved. | Educational Use Only</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // P5G-LaaS Interactive JavaScript
+
+document.addEventListener('DOMContentLoaded', () => {
+    new NetworkDiagram();
+    new TechnologyComparison();
+    new ExperimentTracker();
+
+    const diagram = document.querySelector('.network-diagram');
+    const nodes = {
+        core: document.querySelector('.core-node'),
+        ran: document.querySelector('.ran-node'),
+        ue: document.querySelector('.ue-node')
+    };
+    const connectionLines = document.querySelectorAll('.connection-line');
+
+    const originalStyles = {};
+    const originalRects = {};
+
+    // Save original positions
+    for (const key in nodes) {
+        const node = nodes[key];
+        originalRects[key] = node.getBoundingClientRect();
+        originalStyles[key] = {
+            top: node.style.top,
+            left: node.style.left,
+            right: node.style.right,
+            transform: node.style.transform,
+        };
+    }
+
+    Object.entries(nodes).forEach(([key, node]) => {
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let initialX = 0, initialY = 0;
+
+        const dragStart = (x, y) => {
+            isDragging = true;
+            const rect = node.getBoundingClientRect();
+            initialX = rect.left;
+            initialY = rect.top;
+            startX = x;
+            startY = y;
+
+            node.classList.add('dragging');
+            node.style.position = 'fixed';
+            node.style.top = `${initialY}px`;
+            node.style.left = `${initialX}px`;
+            node.style.right = 'auto';
+            node.style.transform = 'none';
+        };
+
+        const dragMove = (x, y) => {
+            if (!isDragging) return;
+            const dx = x - startX;
+            const dy = y - startY;
+            node.style.top = `${initialY + dy}px`;
+            node.style.left = `${initialX + dx}px`;
+            updateLines();
+        };
+
+        const dragEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            node.classList.remove('dragging');
+
+            const rect = node.getBoundingClientRect();
+            const cx = rect.left;
+            const cy = rect.top;
+            const tx = originalRects[key].left;
+            const ty = originalRects[key].top;
+
+            let progress = 0;
+            const duration = 500;
+            const startTime = performance.now();
+
+            const easeOutElastic = t =>
+                Math.sin(-13 * (t + 1) * Math.PI / 2) * Math.pow(2, -10 * t) + 1;
+
+            const animateBack = (time) => {
+                progress = Math.min((time - startTime) / duration, 1);
+                const ease = easeOutElastic(progress);
+                const lerpX = cx + (tx - cx) * ease;
+                const lerpY = cy + (ty - cy) * ease;
+
+                node.style.top = `${lerpY}px`;
+                node.style.left = `${lerpX}px`;
+                updateLines();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateBack);
+                } else {
+                    node.style.position = 'absolute';
+                    node.style.top = originalStyles[key].top;
+                    node.style.left = originalStyles[key].left;
+                    node.style.right = originalStyles[key].right;
+                    node.style.transform = originalStyles[key].transform;
+                    updateLines();
+                }
+            };
+
+            requestAnimationFrame(animateBack);
+        };
+
+        // Mouse
+        node.addEventListener('mousedown', e => dragStart(e.clientX, e.clientY));
+        document.addEventListener('mousemove', e => dragMove(e.clientX, e.clientY));
+        document.addEventListener('mouseup', dragEnd);
+
+        // Touch
+        node.addEventListener('touchstart', e => {
+            const touch = e.touches[0];
+            dragStart(touch.clientX, touch.clientY);
+        });
+        document.addEventListener('touchmove', e => {
+            const touch = e.touches[0];
+            dragMove(touch.clientX, touch.clientY);
+        });
+        document.addEventListener('touchend', dragEnd);
+    });
+
+    function updateLines() {
+        const diagramRect = diagram.getBoundingClientRect();
+        const getCenter = (rect) => ({
+            x: rect.left + rect.width / 2 - diagramRect.left,
+            y: rect.top + rect.height / 2 - diagramRect.top
+        });
+
+        const c1 = getCenter(nodes.core.getBoundingClientRect());
+        const c2 = getCenter(nodes.ran.getBoundingClientRect());
+        const c3 = getCenter(nodes.ue.getBoundingClientRect());
+
+        setLine(connectionLines[0], c1, c2); // Core → RAN
+        setLine(connectionLines[1], c2, c3); // RAN → UE
+    }
+
+    function setLine(line, start, end) {
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+        line.style.width = `${length}px`;
+        line.style.transform = `translate(${start.x}px, ${start.y}px) rotate(${angle}deg)`;
+        line.style.transformOrigin = '0 0';
+    }
+
+    updateLines();
+    window.addEventListener('resize', updateLines);
+});
+
+
+// DOM Elements
+const hamburger = document.querySelector('.hamburger');
+const navMenu = document.querySelector('.nav-menu');
+const navLinks = document.querySelectorAll('.nav-menu a');
+
+// Mobile Navigation Toggle
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
+});
+
+// Close mobile menu on link click
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+    });
+});
+
+// Smooth scrolling
+document.addEventListener('DOMContentLoaded', () => {
+    const anchors = document.querySelectorAll('a[href^="#"]');
+    anchors.forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const offsetTop = target.offsetTop - 80;
+                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            }
+        });
+    });
+});
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.style.background = 'rgba(102, 126, 234, 0.95)';
+        navbar.style.backdropFilter = 'blur(10px)';
+    } else {
+        navbar.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        navbar.style.backdropFilter = 'none';
+    }
+});
+
+// Animated Counter
+function animateCounter(element, target, duration = 2000) {
+    let current = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+        current += increment;
+        element.textContent = Math.floor(current);
+        if (current >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+        }
+    }, 16);
+}
+
+// Intersection Observer for animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const animatedElements = document.querySelectorAll('.tech-card, .solution-card, .experiment-card, .doc-category, .tutorial-step');
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+});
+
+// Network Diagram Class
+class NetworkDiagram {
+    constructor() {
+        this.nodes = document.querySelectorAll('.node');
+        this.connectionLines = document.querySelectorAll('.connection-line');
+        this.init();
+    }
+
+    init() {
+        if (!this.nodes.length) return;
+        this.animateNodes();
+        this.addInteractivity();
+    }
+
+    animateNodes() {
+        this.nodes.forEach((node, index) => {
+            node.style.opacity = '0';
+            node.style.transform = 'scale(0.8)';
+            node.style.transition = 'all 0.5s ease';
+
+            setTimeout(() => {
+                node.style.opacity = '1';
+                node.style.transform = 'scale(1)';
+            }, index * 200);
+        });
+    }
+
+    addInteractivity() {
+        this.nodes.forEach(node => {
+            node.addEventListener('mouseenter', () => this.highlightConnections(node));
+            node.addEventListener('mouseleave', () => this.resetConnections());
+        });
+    }
+
+    highlightConnections(activeNode) {
+        this.nodes.forEach(node => {
+            if (node !== activeNode) {
+                node.style.opacity = '0.5';
+            } else {
+                node.style.opacity = '1';
+            }
+        });
+
+        this.connectionLines.forEach(line => {
+            line.style.opacity = '1';
+            line.classList.add('flow-animation');
+        });
+    }
+
+    resetConnections() {
+        this.nodes.forEach(node => {
+            node.style.opacity = '1';
+        });
+
+        this.connectionLines.forEach(line => {
+            line.style.opacity = '0.5';
+            line.classList.remove('flow-animation');
+        });
+    }
+}
+
+// Technology Comparison Class
+class TechnologyComparison {
+    constructor() {
+        this.comparisonData = {
+            oai: {
+                name: 'OpenAirInterface',
+                features: ['Full 5G Core and RAN support', '3GPP compliance', 'Network slicing', 'Simulation', 'Documentation'],
+                performance: 95,
+                complexity: 85,
+                support: 90
+            },
+            free5gc: {
+                name: 'Free5GC',
+                features: ['5G Core Network', 'Modular architecture', 'RESTful APIs', 'Web management', 'Easy deployment'],
+                performance: 80,
+                complexity: 60,
+                support: 75
+            },
+            open5gs: {
+                name: 'Open5GS',
+                features: ['4G/5G support', 'Lightweight design', 'Flexible config', 'Efficient', 'Maintained'],
+                performance: 75,
+                complexity: 50,
+                support: 70
+            }
+        };
+
+        this.init();
+    }
+
+    init() {
+        this.createComparisonCharts();
+        this.addComparisonInteractivity();
+    }
+
+    createComparisonCharts() {
+        const cards = document.querySelectorAll('.solution-card');
+        ['oai', 'free5gc', 'open5gs'].forEach((key, i) => {
+            const data = this.comparisonData[key];
+            const card = cards[i];
+            if (card && data) this.addProgressBars(card, data);
+        });
+    }
+
+    addProgressBars(card, data) {
+        const container = document.createElement('div');
+        container.className = 'progress-container';
+        container.innerHTML = `
+            <div class="progress-item"><label>Performance</label><div class="progress-bar"><div class="progress-fill" data-width="${data.performance}%"></div></div></div>
+            <div class="progress-item"><label>Complexity</label><div class="progress-bar"><div class="progress-fill" data-width="${data.complexity}%"></div></div></div>
+            <div class="progress-item"><label>Community Support</label><div class="progress-bar"><div class="progress-fill" data-width="${data.support}%"></div></div></div>
+        `;
+
+        const specs = card.querySelector('.tech-specs');
+        if (specs) specs.appendChild(container);
+
+        setTimeout(() => {
+            container.querySelectorAll('.progress-fill').forEach(fill => {
+                fill.style.width = fill.dataset.width;
+            });
+        }, 500);
+    }
+
+    addComparisonInteractivity() {
+        document.querySelectorAll('.solution-card').forEach(card => {
+            card.addEventListener('click', () => this.showDetailedComparison(card));
+        });
+    }
+
+    showDetailedComparison(card) {
+        const modal = document.createElement('div');
+        modal.className = 'comparison-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Detailed Technology Comparison</h2>
+                <div class="comparison-grid">
+                    <p>Coming soon with interactive tables and charts...</p>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        modal.querySelector('.close').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    }
+}
+
+// Experiment Tracker Class
+class ExperimentTracker {
+    constructor() {
+        this.experiments = [];
+        this.init();
+    }
+
+    init() {
+        this.loadData();
+        this.listen();
+        this.updateStats();
+    }
+
+    loadData() {
+        const saved = localStorage.getItem('p5g_experiments');
+        if (saved) this.experiments = JSON.parse(saved);
+    }
+
+    listen() {
+        document.querySelectorAll('.experiment-actions .btn-primary').forEach((btn, i) => {
+            btn.addEventListener('click', () => this.track(i + 1));
+        });
+    }
+
+    track(id) {
+        const experiment = {
+            id,
+            startTime: new Date().toISOString(),
+            status: 'started'
+        };
+        this.experiments.push(experiment);
+        this.save();
+        this.notify(`Experiment ${id} started successfully!`);
+        this.updateStats();
+    }
+
+    save() {
+        localStorage.setItem('p5g_experiments', JSON.stringify(this.experiments));
+    }
+
+    updateStats() {
+        const total = this.experiments.length;
+        const completed = this.experiments.filter(e => e.status === 'completed').length;
+        document.querySelectorAll('.experiment-stats').forEach(el => {
+            el.innerHTML = `
+                <p>Total Experiments: ${total}</p>
+                <p>Completed: ${completed}</p>
+            `;
+        });
+    }
+
+    notify(msg) {
+        const n = document.createElement('div');
+        n.className = 'experiment-notification';
+        n.textContent = msg;
+        document.body.appendChild(n);
+
+        setTimeout(() => n.classList.add('visible'), 100);
+        setTimeout(() => {
+            n.classList.remove('visible');
+            setTimeout(() => n.remove(), 300);
+        }, 3000);
+    }
+}
+
+
+
+
+    </script>
+</body>
+</html>

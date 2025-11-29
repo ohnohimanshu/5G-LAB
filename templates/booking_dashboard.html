@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Book Experiment Session - 5G Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: #1e293b;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #334155;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: #3b82f6;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: #334155;
+            color: white;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .page-header h1 {
+            color: #1e293b;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .booking-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .experiment-selector {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            height: fit-content;
+        }
+
+        .experiment-selector h2 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .exp-option {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .exp-option:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .exp-option.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .exp-option-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .exp1-icon { background: #3b82f6; }
+        .exp2-icon { background: #10b981; }
+        .exp3-icon { background: #f59e0b; }
+        .exp4-icon { background: #6366f1; }
+        .exp5-icon { background: #ef4444; }
+
+        .exp-option-content h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .exp-option-content p {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .calendar-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header h2 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .date-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .date-nav button {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .date-nav button:hover {
+            background: #e2e8f0;
+        }
+
+        .date-nav .current-date {
+            color: #1e293b;
+            font-weight: 600;
+            padding: 0 1rem;
+        }
+
+        .duration-selector {
+            margin-bottom: 2rem;
+        }
+
+        .duration-selector label {
+            display: block;
+            color: #334155;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .duration-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .duration-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            color: #334155;
+        }
+
+        .duration-btn:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .duration-btn.selected {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .time-slot {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .time-slot:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .time-slot.available {
+            border-color: #d1fae5;
+            background: #f0fdf4;
+        }
+
+        .time-slot.available:hover {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+
+        .time-slot.selected {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .time-slot.booked {
+            border-color: #fecaca;
+            background: #fef2f2;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .time-slot.my-booking {
+            border-color: #bae6fd;
+            background: #e0f2fe;
+        }
+
+        .slot-time {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .slot-status {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .time-slot.booked .slot-status {
+            color: #991b1b;
+        }
+
+        .time-slot.my-booking .slot-status {
+            color: #0369a1;
+        }
+
+        .booking-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-book {
+            flex: 1;
+            background: #10b981;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-book:hover:not(:disabled) {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-book:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .btn-cancel {
+            background: #f8fafc;
+            color: #334155;
+            padding: 1rem 2rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .my-bookings-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            margin-top: 2rem;
+        }
+
+        .my-bookings-section h2 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .booking-info h4 {
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-info p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .btn-cancel-booking {
+            background: #ef4444;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel-booking:hover {
+            background: #dc2626;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 1024px) {
+            .booking-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .time-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .duration-options {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="{% url 'accounts:home' %}" class="logo">
+                <i class="fas fa-network-wired"></i>
+                Private 5G Lab as a Service
+            </a>
+            <div class="nav-links">
+                <a href="{% url 'accounts:home' %}"><i class="fas fa-home"></i> Home</a>
+                <a href="{% url 'accounts:booking_dashboard' %}" style="background: #334155;"><i class="fas fa-calendar-alt"></i> Book Session</a>
+                <h1 style="color: #cbd5e1; font-size: 1rem;">Welcome, {{ user.username }}</h1>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1><i class="fas fa-calendar-plus"></i> Book Experiment Session</h1>
+            <p>Select an experiment, choose your preferred time slot, and book your session</p>
+        </div>
+
+        <div class="booking-container">
+            <!-- Experiment Selector -->
+            <div class="experiment-selector">
+                <h2>Select Experiment</h2>
+                
+                <div class="exp-option" data-exp="exp1" onclick="selectExperiment('exp1')">
+                    <div class="exp-option-icon exp1-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="exp-option-content">
+                        <h3>Exp#1 OAI Core</h3>
+                        <p>Core network testing</p>
+                    </div>
+                </div>
+
+                <div class="exp-option" data-exp="exp2" onclick="selectExperiment('exp2')">
+                    <div class="exp-option-icon exp2-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="exp-option-content">
+                        <h3>Exp#2 OAI+gNB</h3>
+                        <p>Base station integration</p>
+                    </div>
+                </div>
+
+                <div class="exp-option" data-exp="exp3" onclick="selectExperiment('exp3')">
+                    <div class="exp-option-icon exp3-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="exp-option-content">
+                        <h3>Exp#3 OAI+gNB+UE</h3>
+                        <p>End-to-end testing</p>
+                    </div>
+                </div>
+
+                <div class="exp-option" data-exp="exp4" onclick="selectExperiment('exp4')">
+                    <div class="exp-option-icon exp4-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="exp-option-content">
+                        <h3>Exp#4 Open5GS</h3>
+                        <p>Open5GS deployment</p>
+                    </div>
+                </div>
+
+                <div class="exp-option" data-exp="exp5" onclick="selectExperiment('exp5')">
+                    <div class="exp-option-icon exp5-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="exp-option-content">
+                        <h3>Exp#5 Free5GC</h3>
+                        <p>Free5GC environment</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Section -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <h2>Select Time Slot</h2>
+                    <div class="date-nav">
+                        <button onclick="changeDate(-1)"><i class="fas fa-chevron-left"></i></button>
+                        <span class="current-date" id="currentDate">{{ target_date|date:"l, M d, Y" }}</span>
+                        <button onclick="changeDate(1)"><i class="fas fa-chevron-right"></i></button>
+                        <button onclick="goToToday()">Today</button>
+                    </div>
+                </div>
+
+                <div class="duration-selector">
+                    <label>Session Duration</label>
+                    <div class="duration-options">
+                        <button class="duration-btn" data-duration="15" onclick="selectDuration(15)">15 min</button>
+                        <button class="duration-btn" data-duration="30" onclick="selectDuration(30)">30 min</button>
+                        <button class="duration-btn" data-duration="45" onclick="selectDuration(45)">45 min</button>
+                        <button class="duration-btn selected" data-duration="60" onclick="selectDuration(60)">60 min</button>
+                    </div>
+                </div>
+
+                <div class="time-grid" id="timeGrid">
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <p>Select an experiment to view available slots</p>
+                    </div>
+                </div>
+
+                <div class="booking-actions">
+                    <button class="btn-cancel" onclick="resetSelection()">Reset</button>
+                    <button class="btn-book" id="bookBtn" disabled onclick="confirmBooking()">
+                        <i class="fas fa-check"></i> Confirm Booking
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Bookings Section -->
+        <div class="my-bookings-section">
+            <h2><i class="fas fa-list"></i> My Upcoming Bookings</h2>
+            
+            {% if user_bookings %}
+                {% for booking in user_bookings %}
+                <div class="booking-card">
+                    <div class="booking-info">
+                        <h4>{{ booking.experiment.name }}</h4>
+                        <p><i class="fas fa-clock"></i> {{ booking.start_time|date:"M d, Y - H:i" }} to {{ booking.end_time|date:"H:i" }} ({{ booking.duration }} min)</p>
+                    </div>
+                    <form method="post" action="{% url 'accounts:cancel_booking' booking.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-cancel-booking" onclick="return confirm('Are you sure you want to cancel this booking?')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-calendar-check"></i>
+                    <p>No upcoming bookings</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        let selectedExp = null;
+        let selectedDuration = 60;
+        let selectedSlot = null;
+        let currentDate = new Date('{{ target_date|date:"Y-m-d" }}');
+
+        function selectExperiment(exp) {
+            selectedExp = exp;
+            document.querySelectorAll('.exp-option').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`[data-exp="${exp}"]`).classList.add('selected');
+            fetchSlots();
+        }
+
+        function selectDuration(duration) {
+            selectedDuration = duration;
+            document.querySelectorAll('.duration-btn').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`[data-duration="${duration}"]`).classList.add('selected');
+            fetchSlots();
+        }
+
+        function changeDate(days) {
+            currentDate.setDate(currentDate.getDate() + days);
+            updateDateDisplay();
+            fetchSlots();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            updateDateDisplay();
+            fetchSlots();
+        }
+
+        function updateDateDisplay() {
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById('currentDate').textContent = currentDate.toLocaleDateString('en-US', options);
+        }
+
+        async function fetchSlots() {
+            if (!selectedExp) return;
+
+            const dateStr = currentDate.toISOString().split('T')[0];
+            const timeGrid = document.getElementById('timeGrid');
+            timeGrid.innerHTML = '<p style="text-align: center; color: #64748b;">Loading slots...</p>';
+
+            try {
+                const response = await fetch(`/accounts/api/available-slots/?exp=${selectedExp}&date=${dateStr}&duration=${selectedDuration}`);
+                const data = await response.json();
+
+                timeGrid.innerHTML = '';
+
+                if (data.slots && data.slots.length > 0) {
+                    data.slots.forEach(slot => {
+                        const slotDiv = document.createElement('div');
+                        slotDiv.className = `time-slot ${slot.status || 'available'}`;
+                        
+                        if (slot.status === 'booked' || slot.status === 'my_booking') {
+                            slotDiv.style.cursor = 'not-allowed';
+                        } else {
+                            slotDiv.onclick = () => selectSlot(slotDiv, slot.start);
+                        }
+
+                        let statusText = 'Available';
+                        if (slot.status === 'booked') statusText = 'Booked by other';
+                        if (slot.status === 'my_booking') statusText = 'Your booking';
+
+                        slotDiv.innerHTML = `
+                            <div class="slot-time">${slot.display}</div>
+                            <div class="slot-status">${statusText}</div>
+                        `;
+                        
+                        timeGrid.appendChild(slotDiv);
+                    });
+                } else {
+                    timeGrid.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No available slots for this configuration</p></div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                timeGrid.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading slots</p></div>';
+            }
+        }
+
+        function selectSlot(element, startTime) {
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedSlot = startTime;
+            document.getElementById('bookBtn').disabled = false;
+        }
+
+        function resetSelection() {
+            selectedExp = null;
+            selectedSlot = null;
+            document.querySelectorAll('.exp-option').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            document.getElementById('timeGrid').innerHTML = '<div class="empty-state"><i class="fas fa-calendar-times"></i><p>Select an experiment to view available slots</p></div>';
+            document.getElementById('bookBtn').disabled = true;
+        }
+
+        async function confirmBooking() {
+            if (!selectedExp || !selectedSlot) {
+                alert('Please select an experiment and time slot');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('exp', selectedExp);
+            formData.append('start_time', selectedSlot);
+            formData.append('duration', selectedDuration);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            try {
+                const response = await fetch('{% url "accounts:book_session" %}', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Booking confirmed successfully!');
+                    window.location.reload();
+                } else {
+                    const text = await response.text();
+                    alert('Booking failed: ' + text);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Booking failed. Please try again.');
+            }
+        }
+    </script>
+</body>
+
+</html>

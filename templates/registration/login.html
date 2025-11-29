@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | Your App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.8s forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .form-title {
+            color: #333;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            outline: none;
+            background: #f5f5f5;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            background: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #4ECDC4;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #45b7af;
+            transform: translateY(-2px);
+        }
+
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .links a {
+            color: #4ECDC4;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .links a:hover {
+            color: #45b7af;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .messages .error {
+            color: #ff4444;
+            background: #ffe5e5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .messages .success {
+            color: #00C851;
+            background: #e5ffe5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'intro' %}" class="btn" style="position: absolute; top: 30px; left: 30px; width: auto; padding: 10px 25px;">Back</a>
+    
+    <div class="container">
+        <h2 class="form-title">Welcome Back</h2>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <div class="links">
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+        </div>
+    </div>
+</body>
+</html>
