@@ -6,11 +6,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         experiments = [
-            {'exp_key': 'exp1', 'name': 'Exp#1 OAI Core', 'description': 'Test and validate OAI core network', 'url': 'http://10.7.43.10:4040'},
-            {'exp_key': 'exp2', 'name': 'Exp#2 OAI+gNB', 'description': 'Run gNB tests with OAI Core', 'url': 'http://10.7.43.11:4040'},
-            {'exp_key': 'exp3', 'name': 'Exp#3 OAI+gNB+UE', 'description': 'Simulate UE connections', 'url': 'http://10.7.43.12:4040'},
-            {'exp_key': 'exp4', 'name': 'Exp#4 Open5GS', 'description': 'Manage Open5GS core network', 'url': 'http://10.7.43.13:4040'},
-            {'exp_key': 'exp5', 'name': 'Exp#5 Free5GC', 'description': 'Access Free5GC environment', 'url': 'http://10.7.43.14:4040'},
+            {'exp_key': 'exp1', 'name': 'Exp#1 OAI Core', 'description': 'Test and validate OAI core network', 'url': 'http://10.7.43.10'},
+            {'exp_key': 'exp2', 'name': 'Exp#2 OAI+gNB', 'description': 'Run gNB tests with OAI Core', 'url': 'http://10.7.43.11'},
+            {'exp_key': 'exp3', 'name': 'Exp#3 OAI+gNB+UE', 'description': 'Simulate UE connections', 'url': 'http://10.7.43.12'},
+            {'exp_key': 'exp4', 'name': 'Exp#4 Open5GS', 'description': 'Manage Open5GS core network', 'url': 'http://10.7.43.13'},
+            {'exp_key': 'exp5', 'name': 'Exp#5 Free5GC', 'description': 'Access Free5GC environment', 'url': 'http://10.7.43.14'},
         ]
         
         for exp_data in experiments:

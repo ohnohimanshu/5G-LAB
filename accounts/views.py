@@ -19,11 +19,11 @@ logger = logging.getLogger(__name__)
 
 # Map experiment keys to their target UI URL and local restart script (relative to BASE_DIR)
 _SERVICE_MAP = {
-    "exp1": {"url": "http://10.7.43.10:4040", "script": "scripts/restart_oai_core.sh"},
-    "exp2": {"url": "http://10.7.43.11:4040", "script": "scripts/restart_gnb.sh"},
-    "exp3": {"url": "http://10.7.43.12:4040", "script": "scripts/restart_ue.sh"},
-    "exp4": {"url": "http://10.7.43.13:4040", "script": "scripts/restart_open5gs.sh"},
-    "exp5": {"url": "http://10.7.43.14:4040", "script": "scripts/restart_free5gc.sh"},
+    "exp1": {"url": "http://10.7.43.10", "script": "scripts/restart_oai_core.sh"},
+    "exp2": {"url": "http://10.7.43.11", "script": "scripts/restart_gnb.sh"},
+    "exp3": {"url": "http://10.7.43.12", "script": "scripts/restart_ue.sh"},
+    "exp4": {"url": "http://10.7.43.13", "script": "scripts/restart_open5gs.sh"},
+    "exp5": {"url": "http://10.7.43.14", "script": "scripts/restart_free5gc.sh"},
 }
 
 def _run_script_async(script_path):

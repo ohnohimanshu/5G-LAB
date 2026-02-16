@@ -8,6 +8,4 @@ class AccountsConfig(AppConfig):
 
     def ready(self):
         import accounts.signals  # Import signals when app is ready
-        
-            # Call labSetup when the app is ready
 

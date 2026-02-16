@@ -32,7 +32,7 @@ class Experiment(models.Model):
     @property
     def full_url(self):
         """Return complete URL with port."""
-        return f"{self.url}:{self.port}"
+        return self.url
 
 
 class SessionBooking(models.Model):
